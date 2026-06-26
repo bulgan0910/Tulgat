@@ -1,0 +1,6 @@
+{
+  "name": "Cinematic Streaming Hero",
+  "description": "Full-viewport cinematic movie hero section featuring liquid glass UI, background video, and staggered blur-fade animations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
