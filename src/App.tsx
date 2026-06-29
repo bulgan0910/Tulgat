@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Search,
   User,
@@ -26,7 +26,10 @@ import {
   MessageSquare,
   Shield,
   BookmarkCheck,
-  ExternalLink
+  ExternalLink,
+  Bot,
+  Send,
+  Key
 } from 'lucide-react';
 
 interface Movie {
@@ -104,16 +107,42 @@ const NAV_LINKS = [
   { name: "Editor's Pick", id: "pick", delay: "200ms" },
   { name: "Interviews", id: "interviews", delay: "250ms" },
   { name: "User Reviews", id: "reviews", delay: "300ms" },
+  { name: "🤖 My Idol", id: "idol", delay: "350ms" },
 ];
 
 export default function App() {
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeModal, setActiveModal] = useState<'search' | 'trailer' | 'info' | 'reviews' | 'profile' | null>(null);
+  const [activeModal, setActiveModal] = useState<'search' | 'trailer' | 'info' | 'reviews' | 'profile' | 'idol' | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMuted, setIsMuted] = useState(true);
   const [activeTab, setActiveTab] = useState("movies");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  interface ChatMessage {
+    id: string;
+    role: 'user' | 'model';
+    text: string;
+  }
+
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      id: 'init-1',
+      role: 'model',
+      text: 'Сайн уу! Намайг Тулгат гэдэг. Би VideoGame тоглох, сагс хөлбөмбөг тоглох дуртай (гэхдээ сайн туршлагагүй ээ 😅), тэгээд ирээдүйд гоё хоол хийдэг тогооч болохыг хүсдэг! Чи надаас юу асуумаар байна эсвэл зөвлөгөө авмаар байна дээ? 😎👨‍🍳'
+    }
+  ]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [isLoadingAi, setIsLoadingAi] = useState(false);
+  const [customApiKey, setCustomApiKey] = useState("7ItHmjKaCOcprd3g9Seg");
+  const [showApiKeyInput, setShowApiKeyInput] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeModal === 'idol') {
+      chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [chatMessages, activeModal, isLoadingAi]);
 
   const currentMovie = MOVIES[currentMovieIndex];
 
@@ -137,10 +166,63 @@ export default function App() {
     setIsMobileMenuOpen(false);
     if (linkName === "User Reviews") {
       setActiveModal("reviews");
+    } else if (linkName === "🤖 My Idol") {
+      setActiveModal("idol");
     } else if (linkName === "Editor's Pick") {
       showToast("Filtered by Editor's Choice 🏆");
     } else {
       showToast(`Browsing ${linkName}`);
+    }
+  };
+
+  const handleSendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!inputMessage.trim() || isLoadingAi) return;
+
+    const userText = inputMessage.trim();
+    setInputMessage("");
+    const newUserMsg: ChatMessage = {
+      id: Date.now().toString(),
+      role: 'user',
+      text: userText,
+    };
+
+    const updatedHistory = [...chatMessages, newUserMsg];
+    setChatMessages(updatedHistory);
+    setIsLoadingAi(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userText,
+          history: chatMessages.map(m => ({ role: m.role, text: m.text })),
+          customApiKey: customApiKey.trim() || "7ItHmjKaCOcprd3g9Seg"
+        })
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Алдаа гарлаа.");
+      }
+
+      const botMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'model',
+        text: data.text || "Хариулт олдсонгүй.",
+      };
+      setChatMessages(prev => [...prev, botMsg]);
+    } catch (err: any) {
+      showToast(err.message || "AI холбогдоход алдаа гарлаа.");
+      const errorMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'model',
+        text: "Ёоо, жижигхэн асуудал гарчихлаа (сүлжээ эсвэл API алдаа). Дахиад бичээд үз дээ! 🙏",
+      };
+      setChatMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setIsLoadingAi(false);
     }
   };
 
@@ -643,6 +725,148 @@ export default function App() {
             >
               <X className="w-4 h-4" />
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* 6. IDOL AI CHAT MODAL */}
+      {activeModal === 'idol' && (
+        <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-2xl flex items-center justify-center p-3 sm:p-6 animate-fadeIn">
+          <div className="w-full max-w-xl h-[640px] max-h-[90vh] bg-gray-950/95 border border-white/20 rounded-3xl shadow-2xl flex flex-col relative overflow-hidden text-left">
+            
+            {/* Top Chat Header */}
+            <div className="p-4 sm:p-5 border-b border-white/10 bg-gradient-to-r from-gray-900 via-gray-900/80 to-red-950/40 flex items-center justify-between">
+              <div className="flex items-center gap-3.5">
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-600 via-amber-600 to-gray-800 p-0.5 shadow-lg flex items-center justify-center">
+                    <div className="w-full h-full bg-gray-950 rounded-[14px] flex items-center justify-center text-2xl">
+                      🤖
+                    </div>
+                  </div>
+                  <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-emerald-500 border-2 border-gray-950 rounded-full animate-pulse" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">My Idol — Тулгат</h3>
+                    <span className="text-[10px] font-mono uppercase bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 rounded-full">AI Companion</span>
+                  </div>
+                  <p className="text-xs text-gray-400 flex items-center gap-2 mt-0.5">
+                    <span>🎮 Gamer</span>
+                    <span>·</span>
+                    <span>🏀 ⚽ Спортоор хичээллэдэг</span>
+                    <span>·</span>
+                    <span>👨‍🍳 Ирээдүйн тогооч</span>
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowApiKeyInput(!showApiKeyInput)}
+                  className={`p-2 rounded-xl border transition-all cursor-pointer ${showApiKeyInput ? 'bg-amber-500/20 border-amber-500 text-amber-300' : 'bg-white/5 border-white/10 text-gray-400 hover:text-white'}`}
+                  title="Gemini API Key Тохиргоо"
+                >
+                  <Key className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setActiveModal(null)}
+                  className="w-8 h-8 rounded-full liquid-glass flex items-center justify-center text-gray-400 hover:text-white transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+
+            {/* Collapsible API Key Config Bar */}
+            {showApiKeyInput && (
+              <div className="px-5 py-3 bg-gray-900/95 border-b border-amber-500/30 animate-fadeIn text-xs flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-amber-400 flex-shrink-0 font-medium">
+                  <Key className="w-3.5 h-3.5" />
+                  <span>Gemini API Key:</span>
+                </div>
+                <input
+                  type="password"
+                  value={customApiKey}
+                  onChange={(e) => setCustomApiKey(e.target.value)}
+                  placeholder="Өөрийн Gemini API Key тавих..."
+                  className="bg-black/60 border border-white/10 rounded-lg px-3 py-1.5 text-white font-mono flex-1 focus:outline-none focus:border-amber-400"
+                />
+                <button
+                  onClick={() => {
+                    setCustomApiKey("7ItHmjKaCOcprd3g9Seg");
+                    showToast("Үндсэн Key сэргээгдлээ");
+                  }}
+                  className="text-gray-400 hover:text-white underline cursor-pointer"
+                >
+                  Default
+                </button>
+              </div>
+            )}
+
+            {/* Chat Messages Body */}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+              {chatMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-blur-fade-up`}
+                >
+                  <div
+                    className={`max-w-[84%] rounded-2xl p-4 text-sm sm:text-base leading-relaxed relative ${
+                      msg.role === 'user'
+                        ? 'bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-900/20 rounded-br-xs'
+                        : 'bg-white/10 border border-white/10 text-gray-100 backdrop-blur-md rounded-bl-xs'
+                    }`}
+                  >
+                    {msg.role === 'model' && (
+                      <div className="flex items-center gap-1.5 text-[11px] font-bold text-amber-400 mb-1.5 uppercase tracking-wider">
+                        <span>🤖 Тулгат</span>
+                      </div>
+                    )}
+                    <p className="whitespace-pre-wrap">{msg.text}</p>
+                  </div>
+                </div>
+              ))}
+
+              {isLoadingAi && (
+                <div className="flex justify-start animate-pulse">
+                  <div className="bg-white/10 border border-white/10 rounded-2xl rounded-bl-xs px-4 py-3 text-sm text-gray-400 flex items-center gap-2">
+                    <div className="flex gap-1">
+                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                    <span>Тулгат бодож байна...</span>
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+
+            {/* Chat Input Footer */}
+            <form onSubmit={handleSendMessage} className="p-3 sm:p-4 border-t border-white/10 bg-gray-900/80 backdrop-blur-md flex items-center gap-2 sm:gap-3">
+              <input
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Тулгатад зөвлөгөө эсвэл юм ярих..."
+                disabled={isLoadingAi}
+                className="flex-1 bg-black/60 border border-white/15 rounded-full px-5 py-3 text-sm sm:text-base text-white placeholder-gray-500 focus:outline-none focus:border-red-500 transition-all disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={!inputMessage.trim() || isLoadingAi}
+                className="w-12 h-12 rounded-full bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:hover:bg-red-600 text-white flex items-center justify-center transition-all active:scale-95 shadow-lg shadow-red-600/30 cursor-pointer flex-shrink-0"
+              >
+                <Send className="w-5 h-5 -ml-0.5" />
+              </button>
+            </form>
+
+            {/* Safety Reminder Banner at very bottom */}
+            <div className="px-4 py-2 bg-black/90 border-t border-white/5 text-[11px] text-gray-400 flex items-center justify-center gap-1.5 text-center">
+              <Shield className="w-3.5 h-3.5 text-amber-400 flex-shrink-0" />
+              <span>🛡 Чухал эсвэл хүнд асуудлаар итгэдэг том хүн (эцэг эх, багш)-тайгаа зөвлөөрэй.</span>
+            </div>
+
           </div>
         </div>
       )}
