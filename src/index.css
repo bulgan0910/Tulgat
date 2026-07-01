@@ -64,3 +64,25 @@
   opacity: 0;
   animation: blurFadeUp 1s ease-out forwards;
 }
+
+/* Custom shake animation for wrong answers */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%, 45%, 75% { transform: translateX(-6px); }
+  30%, 60%, 90% { transform: translateX(6px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+/* Pulse glow animation for countdown timer */
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 2px rgba(239, 68, 68, 0.4)); }
+  50% { opacity: 0.7; filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.9)); }
+}
+
+.animate-timer-pulse {
+  animation: timerPulse 0.8s infinite;
+}
+

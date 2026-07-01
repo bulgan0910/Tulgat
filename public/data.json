@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "emojis": "🏴‍☠️👒🍖🌊",
+    "answer": "One Piece",
+    "options": ["One Piece", "Naruto", "Fairy Tail", "Bleach"]
+  },
+  {
+    "id": 2,
+    "emojis": "🦊🍥🌀⚡",
+    "answer": "Naruto",
+    "options": ["Naruto", "My Hero Academia", "Demon Slayer", "Jujutsu Kaisen"]
+  },
+  {
+    "id": 3,
+    "emojis": "⚔️👹🌊🌸",
+    "answer": "Demon Slayer",
+    "options": ["Demon Slayer", "Bleach", "Inuyasha", "Attack on Titan"]
+  },
+  {
+    "id": 4,
+    "emojis": "📓🍎📓💀",
+    "answer": "Death Note",
+    "options": ["Death Note", "Code Geass", "Monster", "Steins;Gate"]
+  },
+  {
+    "id": 5,
+    "emojis": "🧱🦖⚔️🧗",
+    "answer": "Attack on Titan",
+    "options": ["Attack on Titan", "Neon Genesis Evangelion", "Gundam", "Sword Art Online"]
+  },
+  {
+    "id": 6,
+    "emojis": "👁️🤞🏫😈",
+    "answer": "Jujutsu Kaisen",
+    "options": ["Jujutsu Kaisen", "Chainsaw Man", "Tokyo Ghoul", "Bleach"]
+  },
+  {
+    "id": 7,
+    "emojis": "🐉🟠⚡💪",
+    "answer": "Dragon Ball",
+    "options": ["Dragon Ball", "One Punch Man", "Naruto", "Hunter x Hunter"]
+  },
+  {
+    "id": 8,
+    "emojis": "🎣⚡🥋🐜",
+    "answer": "Hunter x Hunter",
+    "options": ["Hunter x Hunter", "Yu Yu Hakusho", "Fullmetal Alchemist", "One Piece"]
+  },
+  {
+    "id": 9,
+    "emojis": "🦾🦿🧑‍🔬⚙️",
+    "answer": "Fullmetal Alchemist",
+    "options": ["Fullmetal Alchemist", "Blue Exorcist", "D.Gray-man", "Soul Eater"]
+  },
+  {
+    "id": 10,
+    "emojis": "💀⚔️👘🍊",
+    "answer": "Bleach",
+    "options": ["Bleach", "Gintama", "Naruto", "Demon Slayer"]
+  },
+  {
+    "id": 11,
+    "emojis": "🦸‍♂️🏫⚡🥦",
+    "answer": "My Hero Academia",
+    "options": ["My Hero Academia", "Black Clover", "Jujutsu Kaisen", "Haikyuu!!"]
+  },
+  {
+    "id": 12,
+    "emojis": "🎮⚔️🏰❤️",
+    "answer": "Sword Art Online",
+    "options": ["Sword Art Online", "Log Horizon", "Overlord", "Re:Zero"]
+  },
+  {
+    "id": 13,
+    "emojis": "☕🎭🩸🥩",
+    "answer": "Tokyo Ghoul",
+    "options": ["Tokyo Ghoul", "Parasyte", "Another", "Deadman Wonderland"]
+  },
+  {
+    "id": 14,
+    "emojis": "☄️🌌🧑‍🤝‍🧑🌸",
+    "answer": "Your Name",
+    "options": ["Your Name", "Weathering With You", "A Silent Voice", "5 Centimeters per Second"]
+  },
+  {
+    "id": 15,
+    "emojis": "🪚🐶🩸😈",
+    "answer": "Chainsaw Man",
+    "options": ["Chainsaw Man", "Jujutsu Kaisen", "Dorohedoro", "Devilman Crybaby"]
+  },
+  {
+    "id": 16,
+    "emojis": "🌙🐈‍⬛🎀💫",
+    "answer": "Sailor Moon",
+    "options": ["Sailor Moon", "Cardcaptor Sakura", "Madoka Magica", "Precure"]
+  },
+  {
+    "id": 17,
+    "emojis": " dragons🧖‍♀️🐷🏮",
+    "answer": "Spirited Away",
+    "options": ["Spirited Away", "My Neighbor Totoro", "Howl's Moving Castle", "Princess Mononoke"]
+  },
+  {
+    "id": 18,
+    "emojis": "🧑‍👊🦸‍♂️💥",
+    "answer": "One Punch Man",
+    "options": ["One Punch Man", "Mob Psycho 100", "My Hero Academia", "Dragon Ball Z"]
+  },
+  {
+    "id": 19,
+    "emojis": "🦾🚀🌆🤖",
+    "answer": "Cyberpunk: Edgerunners",
+    "options": ["Cyberpunk: Edgerunners", "Ghost in the Shell", "Akira", "Psycho-Pass"]
+  },
+  {
+    "id": 20,
+    "emojis": "🔬⏱️🍌☎️",
+    "answer": "Steins;Gate",
+    "options": ["Steins;Gate", "Erased", "Re:Zero", "Tokyo Revengers"]
+  }
+]

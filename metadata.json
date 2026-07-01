@@ -1,6 +1,6 @@
 {
   "name": "Cinematic Streaming Hero",
-  "description": "Full-viewport cinematic movie hero section featuring liquid glass UI, background video, staggered blur-fade animations, and interactive AI Idol Tulgat companion chatbot.",
+  "description": "Full-viewport cinematic movie hero section featuring liquid glass UI, background video, staggered blur-fade animations, interactive AI Idol Tulgat, and the rule-compliant Mongolian Anime Guesser Game.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

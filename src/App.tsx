@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import AnimeGames from './components/AnimeGames';
 import {
   Search,
   User,
@@ -108,12 +109,13 @@ const NAV_LINKS = [
   { name: "Interviews", id: "interviews", delay: "250ms" },
   { name: "User Reviews", id: "reviews", delay: "300ms" },
   { name: "🤖 My Idol", id: "idol", delay: "350ms" },
+  { name: "🎮 Anime Games", id: "games", delay: "380ms" },
 ];
 
 export default function App() {
   const [currentMovieIndex, setCurrentMovieIndex] = useState(0);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeModal, setActiveModal] = useState<'search' | 'trailer' | 'info' | 'reviews' | 'profile' | 'idol' | null>(null);
+  const [activeModal, setActiveModal] = useState<'search' | 'trailer' | 'info' | 'reviews' | 'profile' | 'idol' | 'games' | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMuted, setIsMuted] = useState(true);
   const [activeTab, setActiveTab] = useState("movies");
@@ -168,6 +170,8 @@ export default function App() {
       setActiveModal("reviews");
     } else if (linkName === "🤖 My Idol") {
       setActiveModal("idol");
+    } else if (linkName === "🎮 Anime Games") {
+      setActiveModal("games");
     } else if (linkName === "Editor's Pick") {
       showToast("Filtered by Editor's Choice 🏆");
     } else {
@@ -869,6 +873,14 @@ export default function App() {
 
           </div>
         </div>
+      )}
+
+      {/* 7. ANIME GAMES MODAL */}
+      {activeModal === 'games' && (
+        <AnimeGames
+          onClose={() => setActiveModal(null)}
+          showToast={showToast}
+        />
       )}
 
     </div>
